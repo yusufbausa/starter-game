@@ -14,9 +14,10 @@ import (
 func queryTargetPlayer(world cardinal.WorldContext, targetNickname string) (types.EntityID, *comp.Health, error) {
 	var playerID types.EntityID
 	var playerHealth *comp.Health
+	// var playerDirection *comp.Move
 	var err error
 	searchErr := cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health]())).Each(world,
+		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health](), filter.Component[comp.Move]())).Each(world,
 		func(id types.EntityID) bool {
 			var player *comp.Player
 			player, err = cardinal.GetComponent[comp.Player](world, id)

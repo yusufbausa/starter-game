@@ -31,6 +31,7 @@ func MustInitWorld(w *cardinal.World) {
 	Must(
 		cardinal.RegisterComponent[component.Player](w),
 		cardinal.RegisterComponent[component.Health](w),
+		cardinal.RegisterComponent[component.Move](w),
 	)
 
 	// Register messages (user action)
@@ -38,6 +39,8 @@ func MustInitWorld(w *cardinal.World) {
 	Must(
 		cardinal.RegisterMessage[msg.CreatePlayerMsg, msg.CreatePlayerResult](w, "create-player"),
 		cardinal.RegisterMessage[msg.AttackPlayerMsg, msg.AttackPlayerMsgReply](w, "attack-player"),
+		// cardinal.RegisterMessage[msg.MovePlayerMsg, msg.MovePlayerMsgReply](w, "move-player"),
+		cardinal.RegisterMessage[msg.MovePlayerDirectionMsg, msg.MovePlayerDirectionMsgReply](w, "move-player-direction"),
 	)
 
 	// Register queries
@@ -54,6 +57,8 @@ func MustInitWorld(w *cardinal.World) {
 		system.AttackSystem,
 		system.RegenSystem,
 		system.PlayerSpawnerSystem,
+		system.MoveSystem,
+		// system.MoveDirection,
 	))
 
 	Must(cardinal.RegisterInitSystems(w,

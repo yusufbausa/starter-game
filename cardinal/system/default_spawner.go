@@ -16,6 +16,7 @@ func SpawnDefaultPlayersSystem(world cardinal.WorldContext) error {
 		_, err := cardinal.Create(world,
 			comp.Player{Nickname: name},
 			comp.Health{HP: InitialHP},
+			// comp.Move{Direction: direction},
 		)
 		if err != nil {
 			return err
