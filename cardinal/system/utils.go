@@ -14,10 +14,11 @@ import (
 func queryTargetPlayer(world cardinal.WorldContext, targetNickname string) (types.EntityID, *comp.Health, error) {
 	var playerID types.EntityID
 	var playerHealth *comp.Health
+	// var PositionPlayer *comp.Position  //new line
 	// var playerDirection *comp.Move
 	var err error
 	searchErr := cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health](), filter.Component[comp.Move]())).Each(world,
+		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health]())).Each(world,
 		func(id types.EntityID) bool {
 			var player *comp.Player
 			player, err = cardinal.GetComponent[comp.Player](world, id)
@@ -28,6 +29,7 @@ func queryTargetPlayer(world cardinal.WorldContext, targetNickname string) (type
 			// Terminates the search if the player is found
 			if player.Nickname == targetNickname {
 				playerID = id
+				// playerPosition = PositionPlayer
 				playerHealth, err = cardinal.GetComponent[comp.Health](world, id)
 				if err != nil {
 					return false
