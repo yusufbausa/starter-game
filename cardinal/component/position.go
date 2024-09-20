@@ -1,7 +1,12 @@
 package component
 
+// type Position struct {
+// 	PositionPlayer int
+// }
+
 type Position struct {
-	PositionPlayer int
+	X int
+	Y int
 }
 
 func (Position) Name() string {

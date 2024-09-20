@@ -1,72 +1,150 @@
 package system
 
 import (
+	"fmt"
+
+	// "pkg.world.dev/world-engine/cardinal/search/filter"
+	// "pkg.world.dev/world-engine/cardinal/types"
+
 	"pkg.world.dev/world-engine/cardinal"
-	"pkg.world.dev/world-engine/cardinal/search/filter"
-	"pkg.world.dev/world-engine/cardinal/types"
+	// "pkg.world.dev/world-engine/cardinal/search/filter"
+	// "pkg.world.dev/world-engine/cardinal/types"
 
 	comp "starter-game/component"
+	"starter-game/msg"
 
-	// "strings"
-	// "bufio"
-	// "os"
+	"strings"
+
 )
 
-// type Character struct {
-// 	x, y int
+// type PlayerDirectionRequest struct {
+// 	// W string
+// 	// A string
+// 	// S string
+// 	// D string
+// 	InputKeys string
 // }
 
-// const x, y = 1
+// type PlayerDirectionResponse struct {
+// 	Direction int
+// }
 
-// RegenSystem replenishes the player's HP at every tick.
-// This provides an example of a system that doesn't rely on a transaction to update a component.
 func PositionSystem(world cardinal.WorldContext) error {
-	return cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Position]())).
-		Each(world, func(id types.EntityID) bool {
-			position, err := cardinal.GetComponent[comp.Position](world, id)
+	return cardinal.EachMessage[msg.PlayerPositionMsg, msg.PlayerPositionMsgReply](
+		world,
+		func(position cardinal.TxData[msg.PlayerPositionMsg]) (msg.PlayerPositionMsgReply, error) {
+			playerID, playerPosition, err := queryTargetPlayerPosition(world, position.Msg.TargetNickname)
 			if err != nil {
-				return true
-				// func (c *Character) Position(input string) {
-				// 	switch strings.ToUpper(input) {
-				// 	case "W":
-				// 		c.y++
-				// 	case "A":
-				// 		c.x--
-				// 	case "S":
-				// 		c.y--
-				// 	case "D":
-				// 		c.x++
-				// 	default:
-				// 		fmt.Println("Invalid input. Use W, A, A, or D.")
-				// 	}
-				// }
+				return msg.PlayerPositionMsgReply{}, fmt.Errorf("failed to move player: %w", err)
+			}
+			switch strings.ToUpper(position.Msg.Direction) {
+			case "W":
+				playerPosition.Y++
+			case "A":
+				playerPosition.X--
+			case "S":
+				playerPosition.Y--
+			case "D":
+				playerPosition.X++
+			// default:
+			// 	playerPosition
+			}
+			// playerPosition.Position -= AttackDamage
+			// playerHealth.HP -= 
+			if err := cardinal.SetComponent[comp.Position](world, playerID, playerPosition); err != nil {
+				return msg.PlayerPositionMsgReply{}, fmt.Errorf("failed to update position: %w", err)
 			}
 
-			position.PositionPlayer++
-
-			// func MoveDirection() {
-			// 	char := Character{x: 0, y: 0}
-			// 	reader := bufio.NewReader(os.Stdin)
-			
-			// 	fmt.Println("Use WASD keys to move the character. Type 'exit' to quit.")
-			// 	for {
-			// 		fmt.Printf("Current position: (%d, %d)\n", char.x, char.y)
-			// 		fmt.Print("Move: ")
-			// 		input, _ := reader.ReaderString('\n')
-			// 		input = strings.TrimSpace(input)
-			
-			// 		if input == "exit" {
-			// 			break
-			// 		}
-			// 		char.Move(input)
-			
-			// 	}
-			
-			// }
-			if err := cardinal.SetComponent[comp.Position](world, id, position); err != nil {
-				return true
-			}
-			return true
+			return msg.PlayerPositionMsgReply{Position: *playerPosition}, nil
+			// return msg.PlayerPositionMsgReply{}, fmt.Errorf("failed to inflict damage: %w", err)
+			// return nil
 		})
 }
+
+// func DirectionSystem(world cardinal.WorldContext) error {
+// 	return cardinal.NewSearch().Entity(
+// 		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Position]())).
+// 		Each(world, func(id types.EntityID) bool {
+// 			position, err := cardinal.GetComponent[comp.Position](world, id)
+// 			if err != nil {
+// 				return true
+// 			}
+// 			if
+// 			position.X++
+// 			if direction.W == req.Keys {
+// 				playerDirection, err = cardinal.SetComponent[comp.Position](world, id)
+// 				if err != nil {
+// 					return false
+// 				}
+// 				return false
+// 			}
+
+
+// 			health.HP++
+// 			if err := cardinal.SetComponent[comp.Health](world, id, health); err != nil {
+// 				return true
+// 			}
+// 			return true
+// 		})
+// }
+
+
+
+// func DirectionSystem(world cardinal.WorldContext, req *PlayerDirectionRequest) (*PlayerDirectionResponse, error) {
+// 	// var playerDirection *comp.Move
+// 	var playerPosition *comp.Position
+// 	// var keys /**comp.Move*/
+// 	var err error
+// 	searchErr := cardinal.NewSearch().Entity(
+// 		filter.Exact(filter.Component[comp.Player](), /*filter.Component[comp.Move](),*/ filter.Component[comp.Position]())).
+// 		Each(world, func(id types.EntityID) bool {
+			
+// 			// var playerPosition *comp.Position
+// 			// keys, err = cardinal.GetComponent[comp.Move](world, id)
+// 			// if err != nil {
+// 			// 	return false
+// 			// }
+
+// 			// Terminates the search if the player is found
+// 			// if keys.W == req.InputKeys {
+// 			// 	playerPosition.Y++
+// 			// } else if keys.A == req.InputKeys {
+// 			// 	playerPosition.X--
+// 			// } else if keys.S == req.InputKeys {
+// 			// 	playerPosition.Y--
+// 			// } else if keys.D == req.InputKeys {
+// 			// 	playerPosition.X++
+// 			// } /*else {
+// 			// 	return nil, fmt.Errorf("Keys %s does not exist", req.Direction)
+// 			// }*/
+
+
+// 			if req.InputKeys == "W" {
+// 				playerPosition.Y++
+// 			} else if req.InputKeys == "A" {
+// 				playerPosition.X--
+// 			} else if req.InputKeys == "S"{
+// 				playerPosition.Y--
+// 			} else if req.InputKeys == "D"{
+// 				playerPosition.X++
+// 			}
+
+// 			// Continue searching if the player is not the target player
+// 			return true
+// 		})
+// 	if searchErr != nil {
+// 		return nil, searchErr
+// 	}
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	// if keys == nil {
+// 	// 	return nil, fmt.Errorf("player %s does not exist", req.InputKeys)
+// 	// }
+
+// 	return &PlayerDirectionResponse{Direction: playerPosition.X}, nil
+// }
+
+
+

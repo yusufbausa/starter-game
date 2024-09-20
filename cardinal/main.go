@@ -31,7 +31,7 @@ func MustInitWorld(w *cardinal.World) {
 	Must(
 		cardinal.RegisterComponent[component.Player](w),
 		cardinal.RegisterComponent[component.Health](w),
-		cardinal.RegisterComponent[component.Move](w),
+		cardinal.RegisterComponent[component.Direction](w),
 		cardinal.RegisterComponent[component.Position](w),
 	)
 
@@ -41,8 +41,8 @@ func MustInitWorld(w *cardinal.World) {
 		cardinal.RegisterMessage[msg.CreatePlayerMsg, msg.CreatePlayerResult](w, "create-player"),
 		cardinal.RegisterMessage[msg.AttackPlayerMsg, msg.AttackPlayerMsgReply](w, "attack-player"),
 		// cardinal.RegisterMessage[msg.MovePlayerMsg, msg.MovePlayerMsgReply](w, "move-player"),
-		cardinal.RegisterMessage[msg.MovePlayerDirectionMsg, msg.MovePlayerDirectionMsgReply](w, "move-player-direction"),
-		cardinal.RegisterMessage[msg.PositionPlayerMsg, msg.PositionPlayerMsgReply](w, "position-player"),
+		cardinal.RegisterMessage[msg.PlayerDirectionMsg, msg.PlayerDirectionMsgReply](w, "move-player-direction"),
+		cardinal.RegisterMessage[msg.PlayerPositionMsg, msg.PlayerPositionMsgReply](w, "position-player"),
 
 	)
 
@@ -50,6 +50,8 @@ func MustInitWorld(w *cardinal.World) {
 	// NOTE: You must register your queries here for it to be accessible.
 	Must(
 		cardinal.RegisterQuery[query.PlayerHealthRequest, query.PlayerHealthResponse](w, "player-health", query.PlayerHealth),
+		// cardinal.RegisterQuery[query.PlayerPositionRequest, query.PlayerPositionResponse](w, "player-position", query.PlayerPosition),
+		// cardinal.RegisterQuery[query.PlayerDirectionRequest, query.PlayerDirectionResponse](w, "player-direction", query.PlayerDirection),
 	)
 
 	// Each system executes deterministically in the order they are added.
@@ -60,9 +62,9 @@ func MustInitWorld(w *cardinal.World) {
 		system.AttackSystem,
 		system.RegenSystem,
 		system.PlayerSpawnerSystem,
-		system.MoveSystem,
-		// system.MoveDirection,
 		system.PositionSystem,
+		// system.DirectionSystem,
+		system.DirectionSystem,
 	))
 
 	Must(cardinal.RegisterInitSystems(w,

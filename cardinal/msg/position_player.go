@@ -1,9 +1,14 @@
 package msg
 
-type PositionPlayerMsg struct {
-	MainPosition string `json:"position"`
+import (
+	comp "starter-game/component"
+)
+
+type PlayerPositionMsg struct {
+	TargetNickname string `json:"target"`
+	Direction string `json:"Enter W/A/S/D to proceed"`
 }
 
-type PositionPlayerMsgReply struct {
-	MovePosition string `json:"moveposition"`
+type PlayerPositionMsgReply struct {
+	Position comp.Position `json:"position"`
 }

@@ -22,6 +22,10 @@ func PlayerSpawnerSystem(world cardinal.WorldContext) error {
 			id, err := cardinal.Create(world,
 				comp.Player{Nickname: create.Msg.Nickname},
 				comp.Health{HP: InitialHP},
+				comp.Position{
+					X : 0,
+					Y : 0,
+				},
 			)
 			if err != nil {
 				return msg.CreatePlayerResult{}, fmt.Errorf("error creating player: %w", err)
