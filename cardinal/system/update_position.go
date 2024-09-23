@@ -49,8 +49,7 @@ func PositionSystem(world cardinal.WorldContext) error {
 			// default:
 			// 	playerPosition
 			}
-			// playerPosition.Position -= AttackDamage
-			// playerHealth.HP -= 
+
 			if err := cardinal.SetComponent[comp.Position](world, playerID, playerPosition); err != nil {
 				return msg.PlayerPositionMsgReply{}, fmt.Errorf("failed to update position: %w", err)
 			}

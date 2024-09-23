@@ -52,7 +52,7 @@ func queryTargetPlayer(world cardinal.WorldContext, targetNickname string) (type
 
 
 
-// queryTargetPlayerPosition queries for the target player's entity ID and health component.
+//queryTargetPlayerPosition queries for the target player's entity ID and health component.
 func queryTargetPlayerPosition(world cardinal.WorldContext, targetNickname string) (types.EntityID, *comp.Position, error) {
 	var playerID types.EntityID
 	var playerPosition *comp.Position
@@ -148,53 +148,53 @@ func queryTargetPlayerPosition(world cardinal.WorldContext, targetNickname strin
 // }
 
 
-func queryTargetPlayerDirection(world cardinal.WorldContext, targetNickname string) (types.EntityID, *comp.Direction, /**comp.Position,*/ error) {
-	var playerID types.EntityID
-	var playerDirection *comp.Direction
-	// var playerPosition *comp.Position  //new line
-	// var playerDirection *comp.Move
-	var err error
-	searchErr := cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Direction]()/*, filter.Component[comp.Position]()*/)).Each(world,
-		func(id types.EntityID) bool {
-			// var playerPosition *comp.Position
-			var player *comp.Player
-			player, err = cardinal.GetComponent[comp.Player](world, id)
-			if err != nil {
-				return false
-			}
+// func queryTargetPlayerDirection(world cardinal.WorldContext, targetNickname string) (types.EntityID, *comp.Direction, /**comp.Position,*/ error) {
+// 	var playerID types.EntityID
+// 	var playerDirection *comp.Direction
+// 	// var playerPosition *comp.Position  //new line
+// 	// var playerDirection *comp.Move
+// 	var err error
+// 	searchErr := cardinal.NewSearch().Entity(
+// 		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Direction]()/*, filter.Component[comp.Position]()*/)).Each(world,
+// 		func(id types.EntityID) bool {
+// 			// var playerPosition *comp.Position
+// 			var player *comp.Player
+// 			player, err = cardinal.GetComponent[comp.Player](world, id)
+// 			if err != nil {
+// 				return false
+// 			}
 
-			// Terminates the search if the player is found
-			if player.Nickname == targetNickname {
-				playerID = id
-				playerDirection, err = cardinal.GetComponent[comp.Direction](world, id)
-				if err != nil {
-					return false
-				}
-				return false
-			}
+// 			// Terminates the search if the player is found
+// 			if player.Nickname == targetNickname {
+// 				playerID = id
+// 				playerDirection, err = cardinal.GetComponent[comp.Direction](world, id)
+// 				if err != nil {
+// 					return false
+// 				}
+// 				return false
+// 			}
 
-			// if player.Nickname == targetNickname {
-			// 	playerID = id
-			// 	playerPosition, err = cardinal.GetComponent[comp.Position](world, id)
-			// 	if err != nil {
-			// 		return false
-			// 	}
-			// 	return false
-			// }
+// 			// if player.Nickname == targetNickname {
+// 			// 	playerID = id
+// 			// 	playerPosition, err = cardinal.GetComponent[comp.Position](world, id)
+// 			// 	if err != nil {
+// 			// 		return false
+// 			// 	}
+// 			// 	return false
+// 			// }
 
-			// Continue searching if the player is not the target player
-			return true
-		})
-	if searchErr != nil {
-		return 0, nil, err
-	}
-	if err != nil {
-		return 0, nil, err
-	}
-	if playerDirection == nil {
-		return 0, nil, fmt.Errorf("player %q does not exist", targetNickname)
-	}
+// 			// Continue searching if the player is not the target player
+// 			return true
+// 		})
+// 	if searchErr != nil {
+// 		return 0, nil, err
+// 	}
+// 	if err != nil {
+// 		return 0, nil, err
+// 	}
+// 	if playerDirection == nil {
+// 		return 0, nil, fmt.Errorf("player %q does not exist", targetNickname)
+// 	}
 
-	return playerID, playerDirection, /*playerPosition,*/ err
-}
+// 	return playerID, playerDirection, /*playerPosition,*/ err
+// }

@@ -31,7 +31,7 @@ func MustInitWorld(w *cardinal.World) {
 	Must(
 		cardinal.RegisterComponent[component.Player](w),
 		cardinal.RegisterComponent[component.Health](w),
-		cardinal.RegisterComponent[component.Direction](w),
+		// cardinal.RegisterComponent[component.Direction](w),
 		cardinal.RegisterComponent[component.Position](w),
 	)
 
@@ -41,7 +41,7 @@ func MustInitWorld(w *cardinal.World) {
 		cardinal.RegisterMessage[msg.CreatePlayerMsg, msg.CreatePlayerResult](w, "create-player"),
 		cardinal.RegisterMessage[msg.AttackPlayerMsg, msg.AttackPlayerMsgReply](w, "attack-player"),
 		// cardinal.RegisterMessage[msg.MovePlayerMsg, msg.MovePlayerMsgReply](w, "move-player"),
-		cardinal.RegisterMessage[msg.PlayerDirectionMsg, msg.PlayerDirectionMsgReply](w, "move-player-direction"),
+		// cardinal.RegisterMessage[msg.PlayerDirectionMsg, msg.PlayerDirectionMsgReply](w, "move-player-direction"),
 		cardinal.RegisterMessage[msg.PlayerPositionMsg, msg.PlayerPositionMsgReply](w, "position-player"),
 
 	)
@@ -64,7 +64,7 @@ func MustInitWorld(w *cardinal.World) {
 		system.PlayerSpawnerSystem,
 		system.PositionSystem,
 		// system.DirectionSystem,
-		system.DirectionSystem,
+		// system.DirectionSystem,
 	))
 
 	Must(cardinal.RegisterInitSystems(w,
