@@ -23,7 +23,7 @@ func PlayerHealth(world cardinal.WorldContext, req *PlayerHealthRequest) (*Playe
 	var playerHealth *comp.Health
 	var err error
 	searchErr := cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health]())).
+		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health](), filter.Component[comp.Position]())).
 		Each(world, func(id types.EntityID) bool {
 			var player *comp.Player
 			player, err = cardinal.GetComponent[comp.Player](world, id)

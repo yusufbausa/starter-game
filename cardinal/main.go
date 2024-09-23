@@ -50,7 +50,7 @@ func MustInitWorld(w *cardinal.World) {
 	// NOTE: You must register your queries here for it to be accessible.
 	Must(
 		cardinal.RegisterQuery[query.PlayerHealthRequest, query.PlayerHealthResponse](w, "player-health", query.PlayerHealth),
-		// cardinal.RegisterQuery[query.PlayerPositionRequest, query.PlayerPositionResponse](w, "player-position", query.PlayerPosition),
+		cardinal.RegisterQuery[query.PlayerPositionRequest, query.PlayerPositionResponse](w, "player-position", query.PlayerPosition),
 		// cardinal.RegisterQuery[query.PlayerDirectionRequest, query.PlayerDirectionResponse](w, "player-direction", query.PlayerDirection),
 	)
 

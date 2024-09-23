@@ -12,7 +12,7 @@ import (
 // This provides an example of a system that doesn't rely on a transaction to update a component.
 func RegenSystem(world cardinal.WorldContext) error {
 	return cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health]())).
+		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health](), filter.Component[comp.Position]())).
 		Each(world, func(id types.EntityID) bool {
 			health, err := cardinal.GetComponent[comp.Health](world, id)
 			if err != nil {

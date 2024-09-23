@@ -16,7 +16,7 @@ func queryTargetPlayer(world cardinal.WorldContext, targetNickname string) (type
 	var playerHealth *comp.Health
 	var err error
 	searchErr := cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health]())).Each(world,
+		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health](), filter.Component[comp.Position]())).Each(world,
 		func(id types.EntityID) bool {
 			var player *comp.Player
 			player, err = cardinal.GetComponent[comp.Player](world, id)
@@ -56,9 +56,10 @@ func queryTargetPlayer(world cardinal.WorldContext, targetNickname string) (type
 func queryTargetPlayerPosition(world cardinal.WorldContext, targetNickname string) (types.EntityID, *comp.Position, error) {
 	var playerID types.EntityID
 	var playerPosition *comp.Position
+	// var playerHealth *comp.Health
 	var err error
 	searchErr := cardinal.NewSearch().Entity(
-		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Position]())).Each(world,
+		filter.Exact(filter.Component[comp.Player](), filter.Component[comp.Health](), filter.Component[comp.Position]())).Each(world,
 		func(id types.EntityID) bool {
 			var player *comp.Player
 			player, err = cardinal.GetComponent[comp.Player](world, id)
@@ -70,6 +71,7 @@ func queryTargetPlayerPosition(world cardinal.WorldContext, targetNickname strin
 			if player.Nickname == targetNickname {
 				playerID = id
 				playerPosition, err = cardinal.GetComponent[comp.Position](world, id)
+				// playerHealth, err = cardinal.GetComponent[comp.Health](world, id)
 				if err != nil {
 					return false
 				}
@@ -88,7 +90,9 @@ func queryTargetPlayerPosition(world cardinal.WorldContext, targetNickname strin
 	if playerPosition == nil {
 		return 0, nil, fmt.Errorf("player %q does not exist", targetNickname)
 	}
-
+	// if playerHealth == nil {
+	// 	return 0, nil, fmt.Errorf("player %q does not exist", targetNickname)
+	// }
 	return playerID, playerPosition, err
 }
 
